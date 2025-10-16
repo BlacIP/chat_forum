@@ -1,0 +1,30 @@
+<%- include('../partials/layoutTop') %>
+<section class="form-card">
+  <h1>Sign In</h1>
+  <form action="/auth/login" method="post" class="form">
+    <label for="username">Username</label>
+    <input
+      id="username"
+      name="username"
+      type="text"
+      required
+      value="<%= formData.username || '' %>"
+      autocomplete="username"
+    />
+
+    <label for="password">Password</label>
+    <input
+      id="password"
+      name="password"
+      type="password"
+      required
+      autocomplete="current-password"
+    />
+
+    <button type="submit" class="button">Sign In</button>
+  </form>
+  <p class="form-card__footer">
+    Need an account? <a href="/auth/register">Create one now.</a>
+  </p>
+</section>
+<%- include('../partials/layoutBottom') %>

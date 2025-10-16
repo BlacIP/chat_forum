@@ -1,0 +1,59 @@
+<%- include('../partials/layoutTop') %>
+<section class="moderation">
+  <header class="moderation__header">
+    <div class="moderation__header-text">
+      <h1>User Role Management</h1>
+      <p>Promote members to moderators or adjust permissions across the forum.</p>
+    </div>
+  </header>
+
+  <div class="table-wrapper">
+    <table class="user-table">
+      <thead>
+        <tr>
+          <th>Username</th>
+          <th>Role</th>
+          <th>Last Updated</th>
+          <th class="user-table__actions">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% users.forEach(function(account) { %>
+        <tr>
+          <td><%= account.username %></td>
+          <td class="user-table__role"><%= account.role %></td>
+          <td><%= new Date(account.updatedAt).toLocaleString() %></td>
+          <td>
+            <form
+              action="/moderation/users/<%= account._id %>/role"
+              method="post"
+              class="user-actions"
+            >
+              <label class="sr-only" for="role-<%= account._id %>">Select role</label>
+              <select
+                id="role-<%= account._id %>"
+                name="role"
+                <%= currentUserId === account._id && account.role === 'super' ? 'disabled' : '' %>
+              >
+                <% roles.forEach(function(r) { %>
+                <option value="<%= r.value %>" <%= account.role === r.value ? 'selected' : '' %>>
+                  <%= r.label %>
+                </option>
+                <% }) %>
+              </select>
+              <button
+                type="submit"
+                class="button button--ghost"
+                <%= currentUserId === account._id && account.role === 'super' ? 'disabled' : '' %>
+              >
+                Update
+              </button>
+            </form>
+          </td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</section>
+<%- include('../partials/layoutBottom') %>

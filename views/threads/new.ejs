@@ -1,0 +1,48 @@
+<%- include('../partials/layoutTop') %>
+<section class="form-card">
+  <h1>Start a New Thread</h1>
+  <form action="/threads" method="post" class="form">
+    <label for="title">Title</label>
+    <input
+      id="title"
+      name="title"
+      type="text"
+      required
+      minlength="5"
+      placeholder="What would you like to discuss?"
+      value="<%= formData.title || '' %>"
+    />
+
+    <label for="category">Category</label>
+    <input
+      id="category"
+      name="category"
+      type="text"
+      required
+      placeholder="e.g., Development, Productivity"
+      value="<%= formData.category || '' %>"
+    />
+
+    <label for="tags">Tags (comma separated)</label>
+    <input
+      id="tags"
+      name="tags"
+      type="text"
+      placeholder="collaboration,teamwork"
+      value="<%= formData.tags || '' %>"
+    />
+
+    <label for="body">Opening Message</label>
+    <textarea
+      id="body"
+      name="body"
+      rows="6"
+      required
+      minlength="15"
+      placeholder="Set the tone for the discussion..."
+    ><%= formData.body || '' %></textarea>
+
+    <button type="submit" class="button">Create Thread</button>
+  </form>
+</section>
+<%- include('../partials/layoutBottom') %>

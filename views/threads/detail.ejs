@@ -1,0 +1,71 @@
+<%- include('../partials/layoutTop') %>
+<article class="thread-detail">
+  <header class="thread-detail__header">
+    <h1><%= thread.title %></h1>
+    <div class="thread-detail__meta">
+      <span>Category: <%= thread.category %></span>
+      <span>Started by <%= thread.author.username %></span>
+      <span>Created <%= new Date(thread.createdAt).toLocaleString() %></span>
+      <% if (thread.isLocked) { %>
+      <span class="thread-detail__locked">Locked</span>
+      <% } %>
+    </div>
+    <p class="thread-detail__body"><%= thread.body %></p>
+  </header>
+
+  <section class="post-list">
+    <h2>Replies</h2>
+    <% if (!posts.length) { %>
+      <p>No replies yet. Join the conversation!</p>
+    <% } %>
+
+    <% posts.forEach(function(post) { %>
+    <article class="post-card">
+      <header class="post-card__header">
+        <span class="post-card__author"><%= post.author.username %></span>
+        <span><%= new Date(post.createdAt).toLocaleString() %></span>
+        <% if (post.isFlagged) { %>
+        <span class="post-card__flagged">Flagged</span>
+        <% } %>
+        <% if (post.moderationNote) { %>
+        <span class="post-card__note">Moderator note: <%= post.moderationNote %></span>
+        <% } %>
+      </header>
+      <p class="post-card__body"><%= post.body %></p>
+      <% if (user && !post.isFlagged && post.author._id.toString() !== user.id) { %>
+      <form
+        action="/threads/<%= thread._id %>/posts/<%= post._id %>/flag"
+        method="post"
+        class="post-card__flag-form"
+      >
+        <button type="submit" class="button button--ghost">Flag for review</button>
+      </form>
+      <% } %>
+    </article>
+    <% }) %>
+  </section>
+
+  <section class="reply-form">
+    <h2>Add a Reply</h2>
+    <% if (!user) { %>
+      <p>
+        Please <a href="/auth/login">sign in</a> to contribute to this discussion.
+      </p>
+    <% } else if (thread.isLocked) { %>
+      <p>This thread is locked. Reach out to a moderator for more details.</p>
+    <% } else { %>
+    <form action="/threads/<%= thread._id %>/posts" method="post">
+      <label for="body">Your Reply</label>
+      <textarea
+        id="body"
+        name="body"
+        rows="5"
+        required
+        placeholder="Share your perspective..."
+      ><%= formData.body || '' %></textarea>
+      <button type="submit" class="button">Post Reply</button>
+    </form>
+    <% } %>
+  </section>
+</article>
+<%- include('../partials/layoutBottom') %>

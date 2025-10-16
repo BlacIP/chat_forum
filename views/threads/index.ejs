@@ -1,0 +1,49 @@
+<%- include('../partials/layoutTop') %>
+<section class="hero">
+  <div>
+    <h1 class="hero__title">Welcome to ForumHub</h1>
+    <p class="hero__subtitle">
+      Browse active conversations, contribute your insights, and collaborate with peers.
+    </p>
+    <p class="hero__meta">
+      Start the conversation by creating a new thread or exploring the categories below.
+    </p>
+  </div>
+</section>
+
+<% const categoryNames = Object.keys(categories); %>
+<% if (!categoryNames.length) { %>
+  <p>No discussions yet. Be the first to <a href="/threads/new">start a thread</a>.</p>
+<% } %>
+
+<% categoryNames.forEach(function(name) { %>
+<section class="thread-group">
+  <header class="thread-group__header">
+    <h2><%= name %></h2>
+  </header>
+  <ul class="thread-list">
+    <% categories[name].forEach(function(thread) { %>
+    <li class="thread-card">
+      <div class="thread-card__main">
+        <h3><a href="/threads/<%= thread._id %>"><%= thread.title %></a></h3>
+        <p class="thread-card__summary"><%= thread.summary %></p>
+        <div class="thread-card__meta">
+          <span>by <%= thread.author.username %></span>
+          <span>Posts: <%= thread.postCount %></span>
+          <span>Updated: <%= new Date(thread.latestPostAt).toLocaleString() %></span>
+        </div>
+      </div>
+      <% if (thread.tags && thread.tags.length) { %>
+      <ul class="tag-list">
+        <% thread.tags.forEach(function(tag) { %>
+        <li class="tag">#<%= tag %></li>
+        <% }) %>
+      </ul>
+      <% } %>
+    </li>
+    <% }) %>
+  </ul>
+</section>
+<% }) %>
+
+<%- include('../partials/layoutBottom') %>

@@ -1,0 +1,14 @@
+<% if (success && success.length) { %>
+<div class="flash flash--success">
+  <% success.forEach(function (message) { %>
+  <p><%= message %></p>
+  <% }) %>
+</div>
+<% } %>
+<% if (error && error.length) { %>
+<div class="flash flash--error">
+  <% error.forEach(function (message) { %>
+  <p><%= message %></p>
+  <% }) %>
+</div>
+<% } %>

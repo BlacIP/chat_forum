@@ -1,0 +1,71 @@
+<%- include('../partials/layoutTop') %>
+<section class="moderation">
+  <header class="moderation__header">
+    <div class="moderation__header-text">
+      <h1>Moderation Queue</h1>
+      <p>Review flagged posts and manage thread status.</p>
+    </div>
+    <% if (user && user.role === 'super') { %>
+    <div class="moderation__header-actions">
+      <a href="/moderation/users" class="button">Manage User Roles</a>
+    </div>
+    <% } %>
+  </header>
+
+  <% if (!flaggedPosts.length) { %>
+  <p class="muted">No flagged posts right now. Enjoy the calm!</p>
+  <% } %>
+
+  <% flaggedPosts.forEach(function(post) { %>
+  <article class="moderation-card">
+    <header class="moderation-card__header">
+      <h2><a href="/threads/<%= post.thread._id %>"><%= post.thread.title %></a></h2>
+      <span>Thread status:
+        <%= post.thread.isLocked ? 'Locked' : 'Open' %>
+      </span>
+    </header>
+    <div class="moderation-card__body">
+      <p><strong>Author:</strong> <%= post.author.username %></p>
+      <p><strong>Flagged:</strong> <%= new Date(post.createdAt).toLocaleString() %></p>
+      <p><%= post.body %></p>
+    </div>
+    <footer class="moderation-card__actions">
+      <form
+        action="/moderation/posts/<%= post._id %>"
+        method="post"
+        class="moderation-card__form"
+      >
+        <label for="note-<%= post._id %>">Moderator note (optional)</label>
+        <input
+          id="note-<%= post._id %>"
+          name="note"
+          type="text"
+          placeholder="Add context for your decision"
+        />
+        <div class="moderation-card__buttons">
+          <button type="submit" name="action" value="approve" class="button">
+            Approve
+          </button>
+          <button
+            type="submit"
+            name="action"
+            value="remove"
+            class="button button--danger"
+          >
+            Remove
+          </button>
+        </div>
+      </form>
+      <form
+        action="/moderation/threads/<%= post.thread._id %>/toggle-lock"
+        method="post"
+      >
+        <button type="submit" class="button button--ghost">
+          <%= post.thread.isLocked ? 'Unlock Thread' : 'Lock Thread' %>
+        </button>
+      </form>
+    </footer>
+  </article>
+  <% }) %>
+</section>
+<%- include('../partials/layoutBottom') %>

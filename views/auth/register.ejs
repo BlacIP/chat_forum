@@ -1,0 +1,32 @@
+<%- include('../partials/layoutTop') %>
+<section class="form-card">
+  <h1>Create Account</h1>
+  <form action="/auth/register" method="post" class="form">
+    <label for="username">Username</label>
+    <input
+      id="username"
+      name="username"
+      type="text"
+      required
+      minlength="3"
+      value="<%= formData.username || '' %>"
+      autocomplete="username"
+    />
+
+    <label for="password">Password</label>
+    <input
+      id="password"
+      name="password"
+      type="password"
+      required
+      minlength="6"
+      autocomplete="new-password"
+    />
+
+    <button type="submit" class="button">Create Account</button>
+  </form>
+  <p class="form-card__footer">
+    Already have an account? <a href="/auth/login">Sign in.</a>
+  </p>
+</section>
+<%- include('../partials/layoutBottom') %>

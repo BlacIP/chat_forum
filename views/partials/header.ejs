@@ -1,0 +1,28 @@
+<header class="header">
+  <div class="container header__inner">
+    <a href="/" class="logo">ForumHub</a>
+    <nav class="nav">
+      <a href="/">Home</a>
+      <% if (user) { %>
+      <a href="/threads/new">Start Thread</a>
+      <% } %>
+      <% if (user && (user.role === 'moderator' || user.role === 'super')) { %>
+      <a href="/moderation">Moderation</a>
+      <% } %>
+      <% if (user && user.role === 'super') { %>
+      <a href="/moderation/users">Manage Roles</a>
+      <% } %>
+    </nav>
+    <div class="header__auth">
+      <% if (!user) { %>
+      <a href="/auth/login" class="button button--ghost">Sign In</a>
+      <a href="/auth/register" class="button">Create Account</a>
+      <% } else { %>
+      <span>Welcome, <%= user.username %></span>
+      <form action="/auth/logout" method="post">
+        <button type="submit" class="button button--ghost">Sign Out</button>
+      </form>
+      <% } %>
+    </div>
+  </div>
+</header>
